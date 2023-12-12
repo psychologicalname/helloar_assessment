@@ -21,6 +21,19 @@ const AddSong = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        fetch('/api/songs', {
+            method: 'POST',
+            body: JSON.stringify({
+
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+            .then((response) => response.json())
+            .then((json) => {
+
+            });
     }
 
     return (
