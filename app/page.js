@@ -5,6 +5,7 @@ import { useState } from 'react'
 import OtpVerify from '@/components/OtpVerify'
 import SignIn from '@/components/SignIn'
 import Songs from '@/components/Songs';
+import AddSong from '@/components/AddSong';
 
 export default function Home() {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -19,7 +20,7 @@ export default function Home() {
         <OtpVerify requestId={requestId} phone={phone} />
         :
         <SignIn setRequestId={setRequestId} isSignedIn={isSignedIn} setIsSignedIn={setIsSignedIn} phone={phone} setPhone={setPhone} />}
-      <Songs />
+      <AddSong />
     </main>
   )
 }
