@@ -3,6 +3,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { AiOutlineUpload } from "react-icons/ai";
 
 const AddSong = () => {
+    const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [songData, setSongData] = useState({
         name: '',
@@ -13,18 +14,33 @@ const AddSong = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [imageUrl, setImageUrl] = useState(null);
 
+    const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+    });
+
     useEffect(() => {
         if (selectedImage) {
-            setImageUrl(URL.createObjectURL(selectedImage));
+            toBase64(selectedImage).then(res => setImageUrl(res));
         }
     }, [selectedImage]);
 
+    const handleChange = (e) => {
+        setSongData({ ...songData, [e.target.id]: e.target.value });
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        setLoading(true);
         fetch('/api/songs', {
             method: 'POST',
             body: JSON.stringify({
-
+                name: songData.name,
+                link: songData.link,
+                source: songData.source,
+                thumbnail: imageUrl,
             }),
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
@@ -32,21 +48,29 @@ const AddSong = () => {
         })
             .then((response) => response.json())
             .then((json) => {
-
+                setLoading(false);
+                if (json.id) {
+                    setIsOpen(false);
+                    setSelectedImage(null);
+                    setImageUrl(null);
+                    setSongData({
+                        name: '',
+                        link: '',
+                        source: '',
+                        thumbnail: '',
+                    });
+                    window.location.reload();
+                }
+                else {
+                    alert(json?.message || 'Something went wrong! Try again...')
+                }
             });
     }
 
     return (
         <>
-            <div className="fixed inset-0 flex items-center justify-center">
-                <button
-                    type="button"
-                    onClick={() => setIsOpen(true)}
-                    className="rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
-                >
-                    Open dialog
-                </button>
-            </div>
+            <button className='bg-[#FDB927] text-[14px] px-4 py-2' type="button"
+                onClick={() => setIsOpen(true)}>Add Songs</button>
 
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={() => setIsOpen(false)}>
@@ -84,17 +108,17 @@ const AddSong = () => {
                                     <form onSubmit={handleSubmit} className='mt-8 flex flex-col gap-6'>
                                         <div className='flex flex-col gap-2'>
                                             <label htmlFor='name' className='text-[14px] text-black/80'>Song Name</label>
-                                            <input type='text' id='name' placeholder='Song Name' className='border border-[#D9D9D9] rounded-md placeholder:text-[#D9D9D9] text-[14px] focus:outline-none px-3 py-2' />
+                                            <input onChange={handleChange} type='text' id='name' placeholder='Song Name' className='border border-[#D9D9D9] rounded-md placeholder:text-[#D9D9D9] text-[14px] focus:outline-none px-3 py-2' />
                                         </div>
 
                                         <div className='flex flex-col gap-2'>
-                                            <label htmlFor='name' className='text-[14px] text-black/80'>Song Link</label>
-                                            <input type='text' id='name' placeholder='URL' className='border border-[#D9D9D9] rounded-md placeholder:text-[#D9D9D9] text-[14px] focus:outline-none px-3 py-2' />
+                                            <label htmlFor='link' className='text-[14px] text-black/80'>Song Link</label>
+                                            <input onChange={handleChange} type='text' id='link' placeholder='URL' className='border border-[#D9D9D9] rounded-md placeholder:text-[#D9D9D9] text-[14px] focus:outline-none px-3 py-2' />
                                         </div>
 
                                         <div className='flex flex-col gap-2'>
-                                            <label htmlFor='name' className='text-[14px] text-black/80'>Song Source</label>
-                                            <input type='text' id='name' placeholder='Source Name' className='border border-[#D9D9D9] rounded-md placeholder:text-[#D9D9D9] text-[14px] focus:outline-none px-3 py-2' />
+                                            <label htmlFor='source' className='text-[14px] text-black/80'>Song Source</label>
+                                            <input onChange={handleChange} type='text' id='source' placeholder='Source Name' className='border border-[#D9D9D9] rounded-md placeholder:text-[#D9D9D9] text-[14px] focus:outline-none px-3 py-2' />
                                         </div>
 
                                         <div className='flex flex-col gap-2'>
@@ -126,8 +150,8 @@ const AddSong = () => {
                                             </button>
                                             <button
                                                 type='submit'
-                                                className='bg-[#1890FF] px-4 py-1.5 rounded-md text-white text-[14px]'>
-                                                Add
+                                                className={`bg-[#1890FF] px-4 py-1.5 rounded-md text-white text-[14px] ${loading ? 'disabled opacity-70' : ''}`}>
+                                                {loading ? 'Adding' : 'Add'}
                                             </button>
                                         </div>
                                     </form>

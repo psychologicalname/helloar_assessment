@@ -1,6 +1,6 @@
 datasource db {
     provider = "mongodb"
-    url      = env("DATABASE_URL")
+    url      = "mongodb+srv://agrawalpooja101:laXmSuD4v3CVgbLi@cluster0.ivqvpzz.mongodb.net/test"
 }
 
 generator client {
@@ -10,8 +10,8 @@ generator client {
 model Songs {
     id        String   @id @default(auto()) @map("_id") @db.ObjectId
     name      String   @unique
-    source    String   @unique
-    added_on  DateTime
+    source    String   
+    added_on  DateTime @default(now())
     link      String   @unique
     thumbnail String   @unique
 }

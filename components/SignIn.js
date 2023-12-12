@@ -1,10 +1,14 @@
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
+import { useState } from 'react';
 
 const SignIn = ({ phone, setPhone, isSignedIn, setIsSignedIn, setRequestId }) => {
 
+    const [loading, setLoading] = useState(false);
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        setLoading(true);
         fetch('https://dev.api.goongoonalo.com/v1/auth/login', {
             method: 'POST',
             headers: {
@@ -38,7 +42,7 @@ const SignIn = ({ phone, setPhone, isSignedIn, setIsSignedIn, setRequestId }) =>
                             onChange={setPhone}
                             name="phone"
                         />
-                        <button type='submit' className='bg-[#552583] text-white rounded-xl px-6 py-3 font-bold text-[18px]'>Sign In</button>
+                        <button type='submit' className={`bg-[#552583] text-white rounded-xl px-6 py-3 font-bold text-[18px] ${loading ? 'disabled opacity-75': ''}`}>{loading ? 'Signing In' : 'Sign In'}</button>
                     </form>
                 </div>
             </div>
