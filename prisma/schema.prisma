@@ -8,8 +8,10 @@ generator client {
 }
 
 model Songs {
-    id       String   @id @default(auto()) @map("_id") @db.ObjectId
-    name     String   @unique
-    source   String   @unique
-    added_on DateTime
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
+    name      String   @unique
+    source    String   @unique
+    added_on  DateTime
+    link      String   @unique
+    thumbnail String   @unique
 }
