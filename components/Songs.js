@@ -5,13 +5,11 @@ import { MdOutlinePlayArrow } from "react-icons/md";
 import { IoMdLogOut } from "react-icons/io";
 import * as Slider from '@radix-ui/react-slider';
 
-
 function convertDate(inputFormat) {
     function pad(s) { return (s < 10) ? '0' + s : s; }
     var d = new Date(inputFormat)
     return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/')
 }
-
 
 const Songs = () => {
     const [isActive, setIsActive] = useState(false);
@@ -120,7 +118,7 @@ const Songs = () => {
                     <IoMdLogOut className="text-2xl text-[#545454]" />
                     <p className="text-[14px] text-black/80">Logout</p>
                 </button>
-            </div> 
+            </div>
             <div className='col-span-5 flex flex-col justify-between h-screen'>
                 <div>
                     <div className="flex items-center justify-between px-8">
@@ -143,21 +141,21 @@ const Songs = () => {
                                 <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#1890FF] border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
                                     <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
                                 </div>
-                            :
-                            <tbody>
-                            {data.map((song, k) => <tr key={k} className="border-b border-gray-200 text-[14px]">
-                                <td className="py-8 flex items-center">
-                                    <img src={song.thumbnail} alt={song.name} className='h-16 w-16 mr-4' />
-                                    {song.name}
-                                </td>
-                                <td>{song.source}</td>
-                                <td>{convertDate(song.added_on)}</td>
-                                <td onClick={() => setIsActive(k)} className="cursor-pointer"><img src="/play.png" /></td>
-                                <td><img src="/delete.png" onClick={() => handleDelete(song.id)} className="cursor-pointer" /></td>
-                            </tr>)}
-                        </tbody>
+                                :
+                                <tbody>
+                                    {data.map((song, k) => <tr key={k} className="border-b border-gray-200 text-[14px]">
+                                        <td className="py-8 flex items-center">
+                                            <img src={song.thumbnail} alt={song.name} className='h-16 w-16 mr-4' />
+                                            {song.name}
+                                        </td>
+                                        <td>{song.source}</td>
+                                        <td>{convertDate(song.added_on)}</td>
+                                        <td onClick={() => setIsActive(k)} className="cursor-pointer"><img src="/play.png" /></td>
+                                        <td><img src="/delete.png" onClick={() => handleDelete(song.id)} className="cursor-pointer" /></td>
+                                    </tr>)}
+                                </tbody>
                             }
-                            
+
                         </table>
                     </div>
                 </div>

@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react'
 import OtpVerify from '@/components/OtpVerify'
 import SignIn from '@/components/SignIn'
 import Songs from '@/components/Songs';
-import AddSong from '@/components/AddSong';
 
 export default function Home() {
   const [isReady, setIsReady] = useState(false);
